@@ -23,11 +23,11 @@ docker compose pull
 
 strart core network
 ```bash
-docker compose -f docker-compose.yml up -d
+docker compose -f docker-compose.yaml up -d
 ```
 
 watch status of the core network
 ```bash
-watch docker compose -f docker-compose.yml ps -a
+watch docker compose -f docker-compose.yaml ps -a
 ```
 All the docker containors should be `healthy`

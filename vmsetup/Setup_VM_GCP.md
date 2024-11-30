@@ -63,7 +63,7 @@ We will now create a VM on the GCP that satisfies these requirements.
 
 6. For screen capturing and recording you can enable the "Display device" option
 
-7. Click on the "CHANGE" button under the "Boot disk" menu and choose the ***x86/64 Ubuntu 22.04 LTS*** operating system. Double-check that you have chosen the right option. Also make sure to size(GB) to 20.
+7. Click on the "CHANGE" button under the "Boot disk" menu and choose the ***x86/64 Ubuntu 22.04 LTS*** operating system. Double-check that you have chosen the right option. Also make sure to `size(GB)` to `20`.
 <p align="center">
 <img style="display: block; margin: auto;" src="./resources/console_13.png" alt="drawing" width="500"/>
 </p>
