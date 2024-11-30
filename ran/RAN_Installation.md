@@ -90,9 +90,9 @@ iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 50M -R # DL
 iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 20M    # UL
 ```
 ---
-# adding a custom UE
+# Add a custom UE
 
-create a UE config file [ue2.conf](./conf/ue2.conf) with the following structure.
+Create a UE config file [ue2.conf](./conf/ue2.conf) with the following structure.
 ```
 uicc0 = {
   imsi = "001010000000002";
