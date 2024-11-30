@@ -89,7 +89,33 @@ iperf3 -s
 iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 50M -R # DL
 iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 20M    # UL
 ```
+---
+# adding a custom UE
 
+create a UE config file [ue2.conf](./conf/ue2.conf) with the following structure.
+```
+uicc0 = {
+  imsi = "001010000000002";
+  key = "fec86ba6eb707ed08905757b1bb44b8f";
+  opc= "C42449363BBAD02B66D16BC975D77CC1";
+  dnn= "oai";
+  nssai_sst=1;
+}
+```
+
+**Add this UE infomation to the core database in** [cn/database/oai_db.sql](./../cn/database/oai_db.sql)
+
+Add the `imsi`, `key` and `opc` infomation of the UE to the `AuthenticationSubscription` table as follows
+```
+INSERT INTO `AuthenticationSubscription` (`ueid`, `authenticationMethod`, `encPermanentKey`, `protectionParameterId`, `sequenceNumber`, `authenticationManagementField`, `algorithmId`, `encOpcKey`, `encTopcKey`, `vectorGenerationInHss`, `n5gcAuthMethod`, `rgAuthenticationInd`, `supi`) VALUES
+    ('001010000000002', '5G_AKA', 'fec86ba6eb707ed08905757b1bb44b8f', 'fec86ba6eb707ed08905757b1bb44b8f', '{\"sqn\": \"000000000000\", \"sqnScheme\": \"NON_TIME_BASED\", \"lastIndexes\": {\"ausf\": 0}}', '8000', 'milenage', 'C42449363BBAD02B66D16BC975D77CC1', NULL, NULL, NULL, NULL, '001010000000002');
+```
+
+Add the `imsi`, `dnn` and `nssai_sst` infomation of the UE to the SessionManagementSubscriptionData table as follows
+```
+INSERT INTO `SessionManagementSubscriptionData` (`ueid`, `servingPlmnid`, `singleNssai`, `dnnConfigurations`) VALUES
+('001010000000002', '00101', '{\"sst\": 1, \"sd\": \"FFFFFF\"}','{\"oai\":{\"pduSessionTypes\":{ \"defaultSessionType\": \"IPV4\"},\"sscModes\": {\"defaultSscMode\": \"SSC_MODE_1\"},\"5gQosProfile\": {\"5qi\": 6,\"arp\":{\"priorityLevel\": 15,\"preemptCap\": \"NOT_PREEMPT\",\"preemptVuln\":\"PREEMPTABLE\"},\"priorityLevel\":1},\"sessionAmbr\":{\"uplink\":\"1000Mbps\", \"downlink\":\"1000Mbps\"},\"staticIpAddress\":[{\"ipv4Addr\": \"10.0.0.3\"}]},\"ims\":{\"pduSessionTypes\":{ \"defaultSessionType\": \"IPV4V6\"},\"sscModes\": {\"defaultSscMode\": \"SSC_MODE_1\"},\"5gQosProfile\": {\"5qi\": 2,\"arp\":{\"priorityLevel\": 15,\"preemptCap\": \"NOT_PREEMPT\",\"preemptVuln\":\"PREEMPTABLE\"},\"priorityLevel\":1},\"sessionAmbr\":{\"uplink\":\"1000Mbps\", \"downlink\":\"1000Mbps\"}}}');
+```
 ---
 
 # CU-DU F1 split
@@ -98,15 +124,15 @@ To start CU:
 ```
 cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo -E ./nr-softmodem -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-cu.sa.f1.conf
-
 ```
+
 To start DU:
 ```
 cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-du.sa.band78.106prb.rfsim.conf
 ```
 Run the UE:
-```bash
+```
 cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
 ```
