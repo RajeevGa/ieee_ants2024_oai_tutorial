@@ -47,7 +47,7 @@ We will now create a VM on the GCP that satisfies these requirements.
 </p>
 
 2. Click on the "CREATE INSTANCE" button to create a new VM instance
-3. Enter a name to your VM instance and then choose the region. Preferably select a region closest to yours for better performance.
+3. Enter a name to your VM instance and then choose the region. Preferably select a region closest to yours for better performance. Tested region : `asia-south2 (Delhi)`, Zone : `any`
 
 4. Choose "General purpose" Machine Configuration. OAI is reliably tested on x86 architecture and requires Advanced Vector Extensions (AVX2) instructions. The AVX2 instructions are supported by starting from Intel Haswell platforms. Therefore choose a "series" that respects these constraints. An example tested configuration is shown in the figure below
  
@@ -63,7 +63,7 @@ We will now create a VM on the GCP that satisfies these requirements.
 
 6. For screen capturing and recording you can enable the "Display device" option
 
-7. Click on the "CHANGE" button under the "Boot disk" menu and choose the ***x86/64 Ubuntu 22.04 LTS*** operating system. Double-check that you have chosen the right option.
+7. Click on the "CHANGE" button under the "Boot disk" menu and choose the ***x86/64 Ubuntu 22.04 LTS*** operating system. Double-check that you have chosen the right option. Also make sure to size(GB) to 20.
 <p align="center">
 <img style="display: block; margin: auto;" src="./resources/console_13.png" alt="drawing" width="500"/>
 </p>

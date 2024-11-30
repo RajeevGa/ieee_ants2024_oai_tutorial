@@ -114,11 +114,8 @@ database:
 ## general single_nssai configuration
 ## Defines YAML anchors, which are reused in the config file
 snssais:
-  - &embb_slice1
+  - &embb_slice
     sst: 1
-  - &embb_slice2
-    sst: 1
-    sd: 000001
 
 ############## NF-specific configuration
 amf:
@@ -144,8 +141,7 @@ amf:
       mnc: 01
       tac: 0x0001
       nssai:
-        - *embb_slice1
-        - *embb_slice2
+        - *embb_slice
   supported_integrity_algorithms:
     - "NIA1"
     - "NIA2"
@@ -170,27 +166,32 @@ smf:
     secondary_ipv4: "8.8.8.8"
     secondary_ipv6: "2001:4860:4860::8888"
   ims:
-    pcscf_ipv4: "127.0.0.1"
+    pcscf_ipv4: "192.168.70.139"
     pcscf_ipv6: "fe80::7915:f408:1787:db8b"
   # the DNN you configure here should be configured in "dnns"
   # follows the SmfInfo datatype from 3GPP TS 29.510
   smf_info:
     sNssaiSmfInfoList:
-      - sNssai: *embb_slice1
+      - sNssai: *embb_slice
         dnnSmfInfoList:
           - dnn: "oai"
-      - sNssai: *embb_slice2
-        dnnSmfInfoList:
-          - dnn: "internet"
+          - dnn: "openairinterface"
+          - dnn: "ims"
   local_subscription_infos:
-    - single_nssai: *embb_slice1
+    - single_nssai: *embb_slice
       dnn: "oai"
       qos_profile:
         5qi: 9
         session_ambr_ul: "10Gbps"
         session_ambr_dl: "10Gbps"
-    - single_nssai: *embb_slice2
-      dnn: "internet"
+    - single_nssai: *embb_slice
+      dnn: "openairinterface"
+      qos_profile:
+        5qi: 9
+        session_ambr_ul: "10Gbps"
+        session_ambr_dl: "10Gbps"
+    - single_nssai: *embb_slice
+      dnn: "ims"
       qos_profile:
         5qi: 9
         session_ambr_ul: "10Gbps"
@@ -205,19 +206,22 @@ upf:
     - host: oai-smf            # To be used for PFCP association in case of no-NRF
   upf_info:
     sNssaiUpfInfoList:
-      - sNssai: *embb_slice1
+      - sNssai: *embb_slice
         dnnUpfInfoList:
           - dnn: "oai"
-      - sNssai: *embb_slice2
-        dnnUpfInfoList:
-          - dnn: "internet"
+          - dnn: "openairinterface"
+          - dnn: "ims"
 
 ## DNN configuration
 dnns:
   - dnn: "oai"
     pdu_session_type: "IPV4"
     ipv4_subnet: "10.0.0.0/24"
-  - dnn: "internet"
+  - dnn: "openairinterface"
     pdu_session_type: "IPV4V6"
     ipv4_subnet: "10.0.1.0/24"
+    ipv6_prefix: "2001:1:2::/64"
+  - dnn: "ims"
+    pdu_session_type: "IPV4V6"
+    ipv4_subnet: "10.0.9.0/24"
     ipv6_prefix: "2001:1:2::/64"
