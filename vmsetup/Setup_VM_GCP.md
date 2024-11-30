@@ -41,36 +41,36 @@ We will now create a VM on the GCP that satisfies these requirements.
  
 ***Step 2:  Creating a VM Instance***
  
-1. Select the "Compute Engine" and then "VM instances" from your project dashboard.
+1. Select the `Compute Engine` and then `VM instances` from your project dashboard.
 <p align="center">
 <img style="display: block; margin: auto;" src="./resources/console_9.png" alt="drawing" width="400"/>
 </p>
 
-2. Click on the "CREATE INSTANCE" button to create a new VM instance
+2. Click on the `CREATE INSTANCE` button to create a new VM instance
 3. Enter a name to your VM instance and then choose the region. Preferably select a region closest to yours for better performance. Tested region : `asia-south2 (Delhi)`, Zone : `any`
 
-4. Choose "General purpose" Machine Configuration. OAI is reliably tested on x86 architecture and requires Advanced Vector Extensions (AVX2) instructions. The AVX2 instructions are supported by starting from Intel Haswell platforms. Therefore choose a "series" that respects these constraints. An example tested configuration is shown in the figure below
+4. Choose `General purpose` Machine Configuration. OAI is reliably tested on x86 architecture and requires Advanced Vector Extensions (AVX2) instructions. The AVX2 instructions are supported by starting from Intel Haswell platforms. Therefore choose a `series` that respects these constraints. An example tested configuration is shown in the figure below
  
  <p align="center">
 <img style="display: block; margin: auto;" src="./resources/console_10.png" alt="drawing" width="500"/>
 </p>
 
-5. USe the "CUSTOM" option to set your machine type. We require at least 8vCPU cores (4 physical cores) and 16 GB of RAM.  The AVX2 instructions are supported by starting from Intel Haswell platforms. Therefore choose the option in "CPU platform" under "ADVANCED CONFIGURATION" accordingly. An example tested configuration is shown in the figure below.
+5. Use the `CUSTOM` option to set your machine type. We require at least 8vCPU cores (4 physical cores) and 16 GB of RAM.  The AVX2 instructions are supported by starting from Intel Haswell platforms. Therefore choose the option in `CPU platform` under `ADVANCED CONFIGURATION` accordingly. An example tested configuration is shown in the figure below.
 
 <p align="center">
 <img style="display: block; margin: auto;" src="./resources/console_11.png" alt="drawing" width="500"/>
 </p>
 
-6. For screen capturing and recording you can enable the "Display device" option
+6. For screen capturing and recording you can enable the `Display device` option
 
-7. Click on the "CHANGE" button under the "Boot disk" menu and choose the ***x86/64 Ubuntu 22.04 LTS*** operating system. Double-check that you have chosen the right option. Also make sure to `size(GB)` to `20`.
+7. Click on the `CHANGE` button under the `Boot disk` menu and choose the ***x86/64 Ubuntu 22.04 LTS*** operating system. Double-check that you have chosen the right option. Also make sure to `size(GB)` to `20`.
 <p align="center">
 <img style="display: block; margin: auto;" src="./resources/console_13.png" alt="drawing" width="500"/>
 </p>
 
-8. In the "Firewall" enable HTTP and HTTPs traffic and in "Advanced options->Networking" enable the "IP forwarding" 
+8. In the `Firewall` enable HTTP and HTTPs traffic and in `Advanced options->Networking` enable the `IP forwarding` 
 
-9. Hit the "CREATE" button to finish the VM creation
+9. Hit the `CREATE` button to finish the VM creation
 
 10. If you have successfully performed all the above steps, in your project dashboard you can see the VM instance you have just created
  </p>
@@ -84,9 +84,9 @@ We will now create a VM on the GCP that satisfies these requirements.
 
 13. To check if you have `avx2` instruction set, type `lscpu | grep avx2`. If `avx2` is not visible, then the installation is not correct.
 
-14. To stop the VM temporarily, from the "Compute Engine" dashboard select your VM and click on the "Stop" button. You can click on "START/RESUME" to use the VM again. It is preferable to stop the VM when not using it.
+14. To stop the VM temporarily, from the `Compute Engine` dashboard select your VM and click on the `Stop` button. You can click on `START/RESUME` to use the VM again. It is preferable to stop the VM when not using it.
 
-15. If you click on the “Delete” button, however, the VM will be deleted and all data will be lost. If you have accidentally pressed "Delete" then you have to redo all the above steps to make a VM instance.
+15. If you click on the `Delete` button, however, the VM will be deleted and all data will be lost. If you have accidentally pressed `Delete` then you have to redo all the above steps to make a VM instance.
     
 
 
