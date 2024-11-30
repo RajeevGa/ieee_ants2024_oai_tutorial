@@ -89,3 +89,25 @@ iperf3 -s
 iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 50M -R # DL
 iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 20M    # UL
 ```
+
+---
+
+# CU-DU F1 split
+
+To start CU:
+```
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-cu.sa.f1.conf
+
+```
+To start DU:
+```
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-du.sa.band78.106prb.rfsim.conf
+```
+Run the UE:
+```bash
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
+```
+
