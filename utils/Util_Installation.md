@@ -34,7 +34,7 @@ sudo apt install -y docker docker-ce
 sudo usermod -a -G docker $(whoami)
 ```
 
-Now, close the terminal tab and re-open it.
+:exclamation: Now, close the terminal tab and re-open it.
 
 # 3. Networking
 ```bash
