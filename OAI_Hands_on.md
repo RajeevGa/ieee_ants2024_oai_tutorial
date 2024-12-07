@@ -290,3 +290,31 @@ To remove the namespaces
 sudo ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh -d1 -d2
 ```
 
+---
+
+#Configuring TDD Pattern
+
+The TDD pattern can be found in the ran [config file](./conf/gnb.sa.band78.106prb.rfsim.conf), an example TDD pattern with a periodicity 5ms can be seen below
+```
+# dl_UL_TransmissionPeriodicity
+      # 0=ms0p5, 1=ms0p625, 2=ms1, 3=ms1p25, 4=ms2, 5=ms2p5, 6=ms5, 7=ms10
+      dl_UL_TransmissionPeriodicity                                 = 6;   # periodicity of the TDD Pattern
+      nrofDownlinkSlots                                             = 7;   # DL slots per each TDD period
+      nrofDownlinkSymbols                                           = 6;   # DL symbols in a mixed slot
+      nrofUplinkSlots                                               = 2;   # UL slots per each TDD period
+      nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot
+```
+
+This can be configured as per our requirements, for example a TDD pattern with a periodicity 2.5ms can be seen below
+
+```
+# dl_UL_TransmissionPeriodicity
+      # 0=ms0p5, 1=ms0p625, 2=ms1, 3=ms1p25, 4=ms2, 5=ms2p5, 6=ms5, 7=ms10
+      dl_UL_TransmissionPeriodicity                                 = 5;   # periodicity of the TDD Pattern
+      nrofDownlinkSlots                                             = 2;   # DL slots per each TDD period
+      nrofDownlinkSymbols                                           = 6;   # DL symbols in a mixed slot
+      nrofUplinkSlots                                               = 2;   # UL slots per each TDD period
+      nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot
+```
+
+Note that the `subcarrier spacing` choosen for the above mentioned configurations is `30 KHz`
