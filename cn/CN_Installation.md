@@ -5,7 +5,7 @@
 cd ieee_ants2024_oai_tutorial/cn
 ```
 
-If you dont have a docker account, create a docker account in [docker signup](https://www.docker.com/) 
+If you do not have a docker account, create a docker account in [docker signup](https://www.docker.com/) 
 
 Login to docker
 
@@ -21,13 +21,13 @@ Now, pull the 5G core docker images
 docker compose pull
 ```
 
-strart core network
+start core network
 ```bash
 docker compose -f docker-compose.yaml up -d
 ```
 
-watch status of the core network
+watch the status of the core network
 ```bash
 watch docker compose -f docker-compose.yaml ps -a
 ```
-All the docker containors should be `healthy`
+All the docker containers should be `healthy`
