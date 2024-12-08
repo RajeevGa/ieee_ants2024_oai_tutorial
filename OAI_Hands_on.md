@@ -26,6 +26,13 @@ sudo add-apt-repository ppa:wireshark-dev/stable
 sudo apt update
 sudo apt install -y git net-tools wireshark
 ```
+
+## 3. Tshark
+
+```
+sudo apt-get install tshark
+```
+
 ## 3. Networking
 ```
 sudo apt install -y iperf3
@@ -154,6 +161,17 @@ oaitun_ue1: flags=209<UP,POINTOPOINT,RUNNING,NOARP>  mtu 1500
 Some other things to check:
 - You see the RA procedure of the UE in the gNB logs
 
+# Wireshark traces
+
+Log the traces using `tshark` as follows
+```
+mkdir pcap_traces
+sudo chmod  777 pcap_traces
+tshark -i oai-cn5g -w pcap_traces/monolithic.pcap
+```
+
+---
+
 
 # Ping test
 
@@ -196,6 +214,8 @@ uicc0 = {
 
 **Add this UE infomation to the core database in** [cn/database/oai_db.sql](./../cn/database/oai_db.sql)
 
+---
+
 Add the `imsi`, `key` and `opc` infomation of the UE to the `AuthenticationSubscription` table as follows
 ```
 INSERT INTO `AuthenticationSubscription` (`ueid`, `authenticationMethod`, `encPermanentKey`, `protectionParameterId`, `sequenceNumber`, `authenticationManagementField`, `algorithmId`, `encOpcKey`, `encTopcKey`, `vectorGenerationInHss`, `n5gcAuthMethod`, `rgAuthenticationInd`, `supi`) VALUES
@@ -210,26 +230,6 @@ INSERT INTO `SessionManagementSubscriptionData` (`ueid`, `servingPlmnid`, `singl
 
 Restart the `5G core` and use the config file [ue2.conf](./conf/ue2.conf) while running OAI UE
 
----
-
-# CU-DU F1 split
-
-To start CU:
-```
-cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo -E ./nr-softmodem -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-cu.sa.f1.conf
-```
-
-To start DU:
-```
-cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-du.sa.band78.106prb.rfsim.conf
-```
-Run the UE:
-```
-cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
-```
 
 ---
 
@@ -292,7 +292,7 @@ sudo ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh -d1 -d2
 
 ---
 
-#Configuring TDD Pattern
+# Configuring TDD Pattern
 
 The TDD pattern can be found in the ran [config file](./conf/gnb.sa.band78.106prb.rfsim.conf), an example TDD pattern with a periodicity 5ms can be seen below
 ```
@@ -318,3 +318,26 @@ This can be configured as per our requirements, for example a TDD pattern with a
 ```
 
 Note that the `subcarrier spacing` choosen for the above mentioned configurations is `30 KHz`
+
+
+---
+
+# CU-DU F1 split
+
+To start CU:
+```
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-cu.sa.f1.conf
+```
+
+To start DU:
+```
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-du.sa.band78.106prb.rfsim.conf
+```
+Run the UE:
+```
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
+```
+
