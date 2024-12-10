@@ -6,8 +6,12 @@
 
 The aim of this tutorial is to:
 
-1. Set-up of end-to-end 5G/NR SA setup with RFsimulator from source
-2. Task 2
+1. Set-up of end-to-end monolithic 5G/NR SA setup with RFsimulator from source
+2. Add a custom UE
+3. Configuring TDD pattern
+4. Configuring bandwidth
+5. CU-DU split
+6. Working with multiple UE's
 
 # Install required software utilities
 
@@ -25,12 +29,6 @@ Otherwise, you will have to run in sudo mode.
 sudo add-apt-repository ppa:wireshark-dev/stable
 sudo apt update
 sudo apt install -y git net-tools wireshark
-```
-
-## 3. Tshark
-
-```
-sudo apt-get install tshark
 ```
 
 ## 3. Networking
@@ -163,15 +161,12 @@ Some other things to check:
 
 # Wireshark traces
 
-Log the traces using `tshark` as follows
+Log the traces using `tcpdump` as follows
 ```
-mkdir pcap_traces
-sudo chmod  777 pcap_traces
-tshark -i oai-cn5g -w pcap_traces/monolithic.pcap
+sudo tcpdump -i oai-cn5g -w monolithic.pcap
 ```
 
 ---
-
 
 # Ping test
 
@@ -196,6 +191,10 @@ iperf3 -s
 iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 50M -R # DL
 iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 20M    # UL
 ```
+
+---
+
+# Explaing the configuration files: 5G-CORE, gNB and UE
 
 ---
 
@@ -231,6 +230,101 @@ INSERT INTO `SessionManagementSubscriptionData` (`ueid`, `servingPlmnid`, `singl
 Restart the `5G core` and use the config file [ue2.conf](./conf/ue2.conf) while running OAI UE
 
 
+
+---
+
+# Configuring TDD Pattern
+
+The TDD pattern can be found in the ran [config file](./conf/gnb.sa.band78.106prb.rfsim.conf), an example TDD pattern with a periodicity 5ms can be seen below
+```
+# dl_UL_TransmissionPeriodicity
+      # 0=ms0p5, 1=ms0p625, 2=ms1, 3=ms1p25, 4=ms2, 5=ms2p5, 6=ms5, 7=ms10
+      dl_UL_TransmissionPeriodicity                                 = 6;   # periodicity of the TDD Pattern
+      nrofDownlinkSlots                                             = 7;   # DL slots per each TDD period
+      nrofDownlinkSymbols                                           = 6;   # DL symbols in a mixed slot
+      nrofUplinkSlots                                               = 2;   # UL slots per each TDD period
+      nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot
+```
+
+This can be configured as per our requirements, for example a TDD pattern with a periodicity 2.5ms can be seen below
+
+```
+# dl_UL_TransmissionPeriodicity
+      # 0=ms0p5, 1=ms0p625, 2=ms1, 3=ms1p25, 4=ms2, 5=ms2p5, 6=ms5, 7=ms10
+      dl_UL_TransmissionPeriodicity                                 = 5;   # periodicity of the TDD Pattern
+      nrofDownlinkSlots                                             = 2;   # DL slots per each TDD period
+      nrofDownlinkSymbols                                           = 6;   # DL symbols in a mixed slot
+      nrofUplinkSlots                                               = 2;   # UL slots per each TDD period
+      nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot
+```
+
+Note that the `subcarrier spacing` choosen for the above mentioned configurations is `30 KHz`
+
+Excercise: Perform iperf tests in both DL and UL. What do you observe?
+
+---
+
+# Changing bandwidth configuration
+
+Change the bandwidth to `20MHz` configuration
+
+Parameters that need to configured in the ran configuration file are
+
+```
+absoluteFrequencySSB                                        = 640704;  # SSB GSCN
+dl_carrierBandwidth                                         = 51;
+ul_carrierBandwidth                                         = 51;
+initialDLBWPlocationAndBandwidth                            = 13750;   # RIV
+initialULBWPlocationAndBandwidth                            = 13750;   # RIV
+```
+
+To run gNB
+
+```
+sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.51prb.rfsim.conf
+```
+
+To run UE
+
+```
+sudo ./nr-uesoftmodem -r 51 --numerology 1 --band 78 -C 3609300000 --rfsim --ssb 228 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
+```
+
+Resources for calculating [SSB GSCN](https://5g-tools.com/5g-nr-gscn-calculator/) and resources for calculating [RIV](https://www.sqimway.com/rb_calc.php)
+
+---
+
+similarly, a configuration file for `100MHz` has been provided [gnb.sa.band78.273prb.rfsim.conf](./conf/gnb.sa.band78.273prb.rfsim.conf)
+
+To run gNB
+```
+sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.273prb.rfsim.conf
+```
+
+To run UE
+```
+sudo ./nr-uesoftmodem -r 273 --numerology 1 --band 78 -C 3649260000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
+```
+---
+
+# CU-DU F1 split
+
+To start CU:
+```
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-cu.sa.f1.conf
+```
+
+To start DU:
+```
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-du.sa.band78.106prb.rfsim.conf
+```
+Run the UE:
+```
+cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
+```
 ---
 
 # Multiple UE's
@@ -288,56 +382,5 @@ To remove the namespaces
 
 ```
 sudo ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh -d1 -d2
-```
-
----
-
-# Configuring TDD Pattern
-
-The TDD pattern can be found in the ran [config file](./conf/gnb.sa.band78.106prb.rfsim.conf), an example TDD pattern with a periodicity 5ms can be seen below
-```
-# dl_UL_TransmissionPeriodicity
-      # 0=ms0p5, 1=ms0p625, 2=ms1, 3=ms1p25, 4=ms2, 5=ms2p5, 6=ms5, 7=ms10
-      dl_UL_TransmissionPeriodicity                                 = 6;   # periodicity of the TDD Pattern
-      nrofDownlinkSlots                                             = 7;   # DL slots per each TDD period
-      nrofDownlinkSymbols                                           = 6;   # DL symbols in a mixed slot
-      nrofUplinkSlots                                               = 2;   # UL slots per each TDD period
-      nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot
-```
-
-This can be configured as per our requirements, for example a TDD pattern with a periodicity 2.5ms can be seen below
-
-```
-# dl_UL_TransmissionPeriodicity
-      # 0=ms0p5, 1=ms0p625, 2=ms1, 3=ms1p25, 4=ms2, 5=ms2p5, 6=ms5, 7=ms10
-      dl_UL_TransmissionPeriodicity                                 = 5;   # periodicity of the TDD Pattern
-      nrofDownlinkSlots                                             = 2;   # DL slots per each TDD period
-      nrofDownlinkSymbols                                           = 6;   # DL symbols in a mixed slot
-      nrofUplinkSlots                                               = 2;   # UL slots per each TDD period
-      nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot
-```
-
-Note that the `subcarrier spacing` choosen for the above mentioned configurations is `30 KHz`
-
-
----
-
-# CU-DU F1 split
-
-To start CU:
-```
-cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo -E ./nr-softmodem -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-cu.sa.f1.conf
-```
-
-To start DU:
-```
-cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-du.sa.band78.106prb.rfsim.conf
-```
-Run the UE:
-```
-cd ~/openairinterface5g/cmake_targets/ran_build/build
-sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
 ```
 

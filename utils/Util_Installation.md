@@ -18,12 +18,6 @@ sudo apt update
 sudo apt install -y git net-tools wireshark
 ```
 
-# 3. Tshark
-
-```bash
-sudo apt-get install tshark
-```
-
 # 3. Docker
 
 ```bash
