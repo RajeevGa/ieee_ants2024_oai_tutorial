@@ -18,7 +18,7 @@ Enter your password
 Now, pull the 5G core docker images
 
 ```bash
-docker compose pull
+sudo docker compose pull
 ```
 
 start core network
