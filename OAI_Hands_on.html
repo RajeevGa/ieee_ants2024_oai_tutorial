@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-Style-Type" content="text/css" />
+  <meta name="generator" content="pandoc" />
+  <meta name="author" content="Rajeev Gangula, Chandra R. Murthy, Rakesh Mundlamuri, Vinay Kulkarni, Venkatareddy Akumalla" />
+  <meta name="date" content="2025-12-15" />
+  <title>OAI Hands-On Session</title>
+  <style type="text/css">
+      code{white-space: pre-wrap; background: #E4E5E7; }
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" type="text/css" media="screen, projection, print"
+    href="https://www.w3.org/Talks/Tools/Slidy2/styles/slidy.css" />
+  <script src="https://www.w3.org/Talks/Tools/Slidy2/scripts/slidy.js"
+    charset="utf-8" type="text/javascript"></script>
+</head>
+<body>
+<div class="slide titlepage">
+  <h1 class="title">OAI Hands-On Session</h1>
+  <p class="author">
+Rajeev Gangula, Chandra R. Murthy, Rakesh Mundlamuri, Vinay Kulkarni, Venkatareddy Akumalla
+  </p>
+  <p class="date">December 15, 2025</p>
+</div>
+<div class="slide section level1">
+
+<p><strong>What do we cover in the OAI Hands-On Session?</strong></p>
+<p>The aim of this tutorial is to:</p>
+<ol style="list-style-type: decimal">
+<li>Set-up of end-to-end monolithic 5G/NR SA setup with RFsimulator from source</li>
+<li>Add a custom UE</li>
+<li>Configuring TDD pattern</li>
+<li>Configuring bandwidth</li>
+<li>CU-DU split</li>
+<li>Working with multiple UE’s</li>
+</ol>
+</div>
+<div id="install-required-software-utilities" class="slide section level1">
+<h1>Install required software utilities</h1>
+<h2 id="git">1. Git</h2>
+<pre><code>sudo apt-get update
+sudo apt-get install git</code></pre>
+<h2 id="wireshark">2. Wireshark</h2>
+<p>Make sure to select <code>yes</code> when the Wireshark installation asks you whether non-superusers should be able to capture packets. Otherwise, you will have to run in sudo mode.</p>
+<pre><code>sudo add-apt-repository ppa:wireshark-dev/stable
+sudo apt update
+sudo apt install -y git net-tools wireshark</code></pre>
+<h2 id="networking">3. Networking</h2>
+<pre><code>sudo apt install -y iperf3</code></pre>
+</div>
+<div id="install-required-software-utilities-1" class="slide section level1">
+<h1>Install required software utilities</h1>
+<h2 id="docker">4. Docker</h2>
+<pre><code>sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+sudo add-apt-repository &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu  $(lsb_release -cs)  stable&quot;
+sudo apt update
+sudo apt install -y docker docker-ce</code></pre>
+<p>Add your username to the docker group, otherwise you will have to run in sudo mode.</p>
+<pre><code>sudo usermod -a -G docker $(whoami)</code></pre>
+<p>Now, close the terminal tab and re-open it.</p>
+</div>
+<div id="oai-5g-core-procedure-to-pull-and-run-docker-images" class="slide section level1">
+<h1>OAI 5G core: Procedure to pull and run docker images</h1>
+<p>clone the repository</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb6-1" title="1"><span class="fu">git</span> clone https://github.com/RajeevGa/ieee_ants2024_oai_tutorial.git</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="bu">cd</span> ieee_ants2024_oai_tutorial/cn</a></code></pre></div>
+<p>If you dont have a docker account, create a docker account in <a href="https://www.docker.com/">docker signup</a></p>
+<p>Login to docker</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb7-1" title="1"><span class="ex">docker</span> login -u <span class="op">&lt;</span>username<span class="op">&gt;</span></a></code></pre></div>
+<p>Enter your password</p>
+</div>
+<div id="oai-5g-core-procedure-to-pull-and-run-docker-images-1" class="slide section level1">
+<h1>OAI 5G core: Procedure to pull and run docker images</h1>
+<p>Now, pull the 5G core docker images</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb8-1" title="1"><span class="ex">docker</span> compose pull</a></code></pre></div>
+<p>start core network</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb9-1" title="1"><span class="ex">docker</span> compose -f docker-compose.yaml up -d</a></code></pre></div>
+<p>watch status of the core network</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb10-1" title="1"><span class="ex">watch</span> docker compose -f docker-compose.yaml ps -a</a></code></pre></div>
+<p>All the docker containers should be <code>healthy</code></p>
+</div>
+<div id="procedure-to-install-and-run-oai-basestation-gnb-and-the-user-equipment-nrue" class="slide section level1">
+<h1>Procedure to install and run OAI basestation (gNB) and the user equipment (nrUE)</h1>
+<p>Open a new ssh terminal and clone the ran repository</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb11-1" title="1"><span class="fu">git</span> clone https://gitlab.eurecom.fr/oai/openairinterface5g.git</a></code></pre></div>
+<p>compile the gNB and nrUE</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb12-1" title="1"><span class="bu">cd</span> openairinterface5g/</a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="fu">git</span> checkout 2024.w46</a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="bu">source</span> oaienv</a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="bu">cd</span> cmake_targets/</a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="ex">./build_oai</span> -I  </a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="ex">./build_oai</span> -w SIMU --gNB --nrUE --ninja</a></code></pre></div>
+</div>
+<div class="slide section level1">
+
+<ul>
+<li>Run the gNB</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" title="1"><span class="bu">cd</span> ~/openairinterface5g/cmake_targets/ran_build/build</a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="fu">sudo</span> -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.106prb.rfsim.conf</a></code></pre></div>
+<ul>
+<li>Run the UE from a second terminal:</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" title="1"><span class="bu">cd</span> ~/openairinterface5g/cmake_targets/ran_build/build</a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="fu">sudo</span> -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf</a></code></pre></div>
+</div>
+<div class="slide section level1">
+
+<p>Verify that it is connected: you should see the following output at gNB:</p>
+<pre><code>[NR_RRC]   [DL] (cellID bc614e, UE ID 1 RNTI c40a) Generate RRCReconfiguration (bytes 307, xid 3)
+[RRC]   UE 1: PDU session ID 10 modified 1 bearers
+[NR_RRC]   [UL] (cellID bc614e, UE ID 1 RNTI c40a) Received RRCReconfigurationComplete
+[NR_RRC]   msg index 0, pdu_sessions index 0, status 2, xid 3): nb_of_pdusessions 1,  pdusession_id 10, teid: 2817854240 
+[NR_RRC]   NGAP_PDUSESSION_SETUP_RESP: sending the message</code></pre>
+<p>and nrUE:</p>
+<pre><code>[NR_RRC]    Logical Channel UL-DCCH (SRB1), Generating RRCReconfigurationComplete (bytes 2)
+[OIP]   Interface oaitun_ue1 successfully configured, IPv4 10.0.0.7, IPv6 (null)</code></pre>
+<p>Correspondingly, an interface should have been brought up:</p>
+<pre><code>oaitun_ue1: flags=209&lt;UP,POINTOPOINT,RUNNING,NOARP&gt;  mtu 1500
+        inet 10.0.0.7  netmask 255.255.255.0  destination 10.0.0.7
+        inet6 fe80::60bd:b117:1bb0:47c4  prefixlen 64  scopeid 0x20&lt;link&gt;
+        unspec 00-00-00-00-00-00-00-00-00-00-00-00-00-00-00-00  txqueuelen 500  (UNSPEC)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 5  bytes 240 (240.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</code></pre>
+<p>Some other things to check: - You see the RA procedure of the UE in the gNB logs</p>
+</div>
+<div id="wireshark-traces" class="slide section level1">
+<h1>Wireshark traces</h1>
+<p>Log the traces using <code>tcpdump</code> as follows</p>
+<pre><code>sudo tcpdump -i oai-cn5g -w monolithic.pcap</code></pre>
+</div>
+<div id="ping-test" class="slide section level1">
+<h1>Ping test</h1>
+<ul>
+<li>Check the UE’s IP address: interface <code>oaitun_ue1</code> using <code>ifconfig</code></li>
+<li>The IP address <code>192.168.70.135</code> is the IP address of the <code>oai-ext-dn</code> container.</li>
+<li>Ping:</li>
+</ul>
+<pre><code>ping -I oaitun_ue1 192.168.70.135                 # from host, &quot;UL&quot;, to oai-ext-dn
+docker exec -it oai-ext-dn ping &lt;UE IP address&gt;   # from container, &quot;DL&quot;</code></pre>
+</div>
+<div id="iperf-test" class="slide section level1">
+<h1>Iperf test</h1>
+<ul>
+<li>Iperf3 testing between <code>oai-ext-dn</code> (in Docker) and the UE (running locally)</li>
+</ul>
+<pre><code>docker exec -it oai-ext-dn bash
+iperf3 -s</code></pre>
+<ul>
+<li>on the host in new terminal, run iperf3 client and bind the UE IP address:</li>
+</ul>
+<pre><code>iperf3 -B &lt;UE IP ADDRESS&gt; -c 192.168.70.135 -u -b 50M -R # DL
+iperf3 -B &lt;UE IP ADDRESS&gt; -c 192.168.70.135 -u -b 20M    # UL</code></pre>
+</div>
+<div id="explaing-the-configuration-files-5g-core-gnb-and-ue" class="slide section level1">
+<h1>Explaing the configuration files: 5G-CORE, gNB and UE</h1>
+</div>
+<div id="add-a-custom-ue" class="slide section level1">
+<h1>Add a custom UE</h1>
+<p>Create a UE config file <a href="./conf/ue2.conf">ue2.conf</a> with the following structure.</p>
+<pre><code>uicc0 = {
+  imsi = &quot;001010000000002&quot;;
+  key = &quot;fec86ba6eb707ed08905757b1bb44b8f&quot;;
+  opc= &quot;C42449363BBAD02B66D16BC975D77CC1&quot;;
+  dnn= &quot;oai&quot;;
+  nssai_sst=1;
+}</code></pre>
+<p><strong>Add this UE infomation to the core database in</strong> <a href="./../cn/database/oai_db.sql">cn/database/oai_db.sql</a></p>
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/imsi.png" alt="drawing" width="800"/>
+</p>
+</div>
+<div class="slide section level1">
+
+<p>Add the <code>imsi</code>, <code>key</code> and <code>opc</code> infomation of the UE to the <code>AuthenticationSubscription</code> table as follows</p>
+<pre><code>INSERT INTO `AuthenticationSubscription` (`ueid`, `authenticationMethod`, `encPermanentKey`, `protectionParameterId`, `sequenceNumber`, `authenticationManagementField`, `algorithmId`, `encOpcKey`, `encTopcKey`, `vectorGenerationInHss`, `n5gcAuthMethod`, `rgAuthenticationInd`, `supi`) VALUES
+    (&#39;001010000000002&#39;, &#39;5G_AKA&#39;, &#39;fec86ba6eb707ed08905757b1bb44b8f&#39;, &#39;fec86ba6eb707ed08905757b1bb44b8f&#39;, &#39;{\&quot;sqn\&quot;: \&quot;000000000000\&quot;, \&quot;sqnScheme\&quot;: \&quot;NON_TIME_BASED\&quot;, \&quot;lastIndexes\&quot;: {\&quot;ausf\&quot;: 0}}&#39;, &#39;8000&#39;, &#39;milenage&#39;, &#39;C42449363BBAD02B66D16BC975D77CC1&#39;, NULL, NULL, NULL, NULL, &#39;001010000000002&#39;);</code></pre>
+<p>Add the <code>imsi</code>, <code>dnn</code> and <code>nssai_sst</code> infomation of the UE to the <code>SessionManagementSubscriptionData</code> table as follows</p>
+<pre><code>INSERT INTO `SessionManagementSubscriptionData` (`ueid`, `servingPlmnid`, `singleNssai`, `dnnConfigurations`) VALUES
+(&#39;001010000000002&#39;, &#39;00101&#39;, &#39;{\&quot;sst\&quot;: 1, \&quot;sd\&quot;: \&quot;FFFFFF\&quot;}&#39;,&#39;{\&quot;oai\&quot;:{\&quot;pduSessionTypes\&quot;:{ \&quot;defaultSessionType\&quot;: \&quot;IPV4\&quot;},\&quot;sscModes\&quot;: {\&quot;defaultSscMode\&quot;: \&quot;SSC_MODE_1\&quot;},\&quot;5gQosProfile\&quot;: {\&quot;5qi\&quot;: 6,\&quot;arp\&quot;:{\&quot;priorityLevel\&quot;: 15,\&quot;preemptCap\&quot;: \&quot;NOT_PREEMPT\&quot;,\&quot;preemptVuln\&quot;:\&quot;PREEMPTABLE\&quot;},\&quot;priorityLevel\&quot;:1},\&quot;sessionAmbr\&quot;:{\&quot;uplink\&quot;:\&quot;1000Mbps\&quot;, \&quot;downlink\&quot;:\&quot;1000Mbps\&quot;},\&quot;staticIpAddress\&quot;:[{\&quot;ipv4Addr\&quot;: \&quot;10.0.0.3\&quot;}]},\&quot;ims\&quot;:{\&quot;pduSessionTypes\&quot;:{ \&quot;defaultSessionType\&quot;: \&quot;IPV4V6\&quot;},\&quot;sscModes\&quot;: {\&quot;defaultSscMode\&quot;: \&quot;SSC_MODE_1\&quot;},\&quot;5gQosProfile\&quot;: {\&quot;5qi\&quot;: 2,\&quot;arp\&quot;:{\&quot;priorityLevel\&quot;: 15,\&quot;preemptCap\&quot;: \&quot;NOT_PREEMPT\&quot;,\&quot;preemptVuln\&quot;:\&quot;PREEMPTABLE\&quot;},\&quot;priorityLevel\&quot;:1},\&quot;sessionAmbr\&quot;:{\&quot;uplink\&quot;:\&quot;1000Mbps\&quot;, \&quot;downlink\&quot;:\&quot;1000Mbps\&quot;}}}&#39;);</code></pre>
+<p>Restart the <code>5G core</code> and use the config file <a href="./conf/ue2.conf">ue2.conf</a> while running OAI UE</p>
+</div>
+<div id="configuring-tdd-pattern" class="slide section level1">
+<h1>Configuring TDD Pattern</h1>
+<p>The TDD pattern can be found in the ran <a href="./conf/gnb.sa.band78.106prb.rfsim.conf">config file</a>, an example TDD pattern with a periodicity 5ms can be seen below</p>
+<pre><code># dl_UL_TransmissionPeriodicity
+      # 0=ms0p5, 1=ms0p625, 2=ms1, 3=ms1p25, 4=ms2, 5=ms2p5, 6=ms5, 7=ms10
+      dl_UL_TransmissionPeriodicity                                 = 6;   # periodicity of the TDD Pattern
+      nrofDownlinkSlots                                             = 7;   # DL slots per each TDD period
+      nrofDownlinkSymbols                                           = 6;   # DL symbols in a mixed slot
+      nrofUplinkSlots                                               = 2;   # UL slots per each TDD period
+      nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot</code></pre>
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/tdd_pattern_1.png" alt="drawing" width="900"/>
+</p>
+<p><strong>Note:</strong> The <code>subcarrier spacing</code> choosen for the above mentioned configurations is <code>30 KHz</code></p>
+</div>
+<div class="slide section level1">
+
+<p>This can be configured as per our requirements, for example a TDD pattern with a periodicity 2.5ms can be seen below</p>
+<pre><code># dl_UL_TransmissionPeriodicity
+      # 0=ms0p5, 1=ms0p625, 2=ms1, 3=ms1p25, 4=ms2, 5=ms2p5, 6=ms5, 7=ms10
+      dl_UL_TransmissionPeriodicity                                 = 5;   # periodicity of the TDD Pattern
+      nrofDownlinkSlots                                             = 2;   # DL slots per each TDD period
+      nrofDownlinkSymbols                                           = 6;   # DL symbols in a mixed slot
+      nrofUplinkSlots                                               = 2;   # UL slots per each TDD period
+      nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot</code></pre>
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/tdd_pattern_2.png" alt="drawing" width="1000"/>
+</p>
+<p><strong>Excercise:</strong> Perform iperf tests in both DL and UL. What do you observe?</p>
+</div>
+<div id="changing-bandwidth-configuration" class="slide section level1">
+<h1>Changing bandwidth configuration</h1>
+<p>Change the bandwidth to <code>20MHz</code> configuration</p>
+<p>Parameters that need to configured in the ran configuration file are</p>
+<pre><code>absoluteFrequencySSB                                        = 640704;  # SSB GSCN
+dl_carrierBandwidth                                         = 51;
+ul_carrierBandwidth                                         = 51;
+initialDLBWPlocationAndBandwidth                            = 13750;   # RIV
+initialULBWPlocationAndBandwidth                            = 13750;   # RIV</code></pre>
+<p>To run gNB</p>
+<pre><code>sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.51prb.rfsim.conf</code></pre>
+<p>To run UE</p>
+<pre><code>sudo ./nr-uesoftmodem -r 51 --numerology 1 --band 78 -C 3609300000 --rfsim --ssb 228 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf</code></pre>
+<p>Resources for calculating <a href="https://5g-tools.com/5g-nr-gscn-calculator/">SSB GSCN</a> and resources for calculating <a href="https://www.sqimway.com/rb_calc.php">RIV</a></p>
+</div>
+<div class="slide section level1">
+
+<p>similarly, a configuration file for <code>100MHz</code> has been provided <a href="./conf/gnb.sa.band78.273prb.rfsim.conf">gnb.sa.band78.273prb.rfsim.conf</a></p>
+<p>To run gNB</p>
+<pre><code>sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.273prb.rfsim.conf</code></pre>
+<p>To run UE</p>
+<pre><code>sudo ./nr-uesoftmodem -r 273 --numerology 1 --band 78 -C 3649260000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf</code></pre>
+</div>
+<div id="cu-du-f1-split" class="slide section level1">
+<h1>CU-DU F1 split</h1>
+<p>To start CU:</p>
+<pre><code>cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-cu.sa.f1.conf</code></pre>
+<p>To start DU:</p>
+<pre><code>cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb-du.sa.band78.106prb.rfsim.conf</code></pre>
+<p>Run the UE:</p>
+<pre><code>cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf</code></pre>
+</div>
+<div id="multiple-ues" class="slide section level1">
+<h1>Multiple UE’s</h1>
+<p>To start gNB:</p>
+<pre><code>cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.106prb.rfsim.conf</code></pre>
+<p>To start UE1:</p>
+<pre><code>cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh -c1 -e
+sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim -O /home/rakeshmundlamuri7/ieee_ants2024_oai_tutorial/ran/conf/ue1.conf --rfsimulator.serveraddr 10.201.1.100</code></pre>
+<p>To start UE2:</p>
+<pre><code>cd ~/openairinterface5g/cmake_targets/ran_build/build
+sudo ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh -c2 -e
+sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim -O /home/rakeshmundlamuri7/ieee_ants2024_oai_tutorial/ran/conf/ue2.conf --rfsimulator.serveraddr 10.202.1.100</code></pre>
+</div>
+<div class="slide section level1">
+
+<p>To login to ue1 namespace</p>
+<pre><code>sudo ip netns exec ue1 bash</code></pre>
+<p>To login to ue1 namespace</p>
+<pre><code>sudo ip netns exec ue2 bash</code></pre>
+<p>You can now perform ping and iperf tests</p>
+<p>ping from UE1</p>
+<pre><code>ping -I oaitun_ue1 192.168.70.135                 # from host, &quot;UL&quot;, to oai-ext-dn</code></pre>
+<p>ping from UE2</p>
+<pre><code>ping -I oaitun_ue1 192.168.70.135                 # from host, &quot;UL&quot;, to oai-ext-dn</code></pre>
+<p>To remove the namespaces</p>
+<pre><code>sudo ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh -d1 -d2</code></pre>
+</div>
+</body>
+</html>

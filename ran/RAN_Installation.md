@@ -178,7 +178,7 @@ sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.b
 
 To run UE
 ```
-sudo ./nr-uesoftmodem -r 51 --numerology 1 --band 78 -C 3609300000 --rfsim --ssb 228 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
+sudo -E ./nr-uesoftmodem -r 51 --numerology 1 --band 78 -C 3609300000 --rfsim --ssb 228 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
 ```
 
 Resources for calculating [SSB GSCN](https://5g-tools.com/5g-nr-gscn-calculator/) and resources for calculating [RIV](https://www.sqimway.com/rb_calc.php)
@@ -192,7 +192,7 @@ sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.b
 
 To run UE
 ```
-sudo ./nr-uesoftmodem -r 273 --numerology 1 --band 78 -C 3649260000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
+sudo -E ./nr-uesoftmodem -r 273 --numerology 1 --band 78 -C 3649260000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
 ```
 
 ---

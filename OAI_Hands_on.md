@@ -210,8 +210,12 @@ uicc0 = {
   nssai_sst=1;
 }
 ```
-
 **Add this UE infomation to the core database in** [cn/database/oai_db.sql](./../cn/database/oai_db.sql)
+
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/imsi.png" alt="drawing" width="800"/>
+</p>
 
 ---
 
@@ -246,6 +250,15 @@ The TDD pattern can be found in the ran [config file](./conf/gnb.sa.band78.106pr
       nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot
 ```
 
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/tdd_pattern_1.png" alt="drawing" width="900"/>
+</p>
+
+**Note:** The `subcarrier spacing` choosen for the above mentioned configurations is `30 KHz`
+
+---
+
 This can be configured as per our requirements, for example a TDD pattern with a periodicity 2.5ms can be seen below
 
 ```
@@ -258,9 +271,12 @@ This can be configured as per our requirements, for example a TDD pattern with a
       nrofUplinkSymbols                                             = 4;   # UL symbols in a mixed slot
 ```
 
-Note that the `subcarrier spacing` choosen for the above mentioned configurations is `30 KHz`
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/tdd_pattern_2.png" alt="drawing" width="1000"/>
+</p>
 
-Excercise: Perform iperf tests in both DL and UL. What do you observe?
+**Excercise:** Perform iperf tests in both DL and UL. What do you observe?
 
 ---
 
