@@ -161,28 +161,65 @@ sudo apt install -y docker docker-ce</code></pre>
 <a class="sourceLine" id="cb12-5" title="5"><span class="ex">./build_oai</span> -I  </a>
 <a class="sourceLine" id="cb12-6" title="6"><span class="ex">./build_oai</span> -w SIMU --gNB --nrUE --ninja</a></code></pre></div>
 </div>
+<div id="explain-the-configuration-files" class="slide section level1">
+<h1>Explain the configuration files:</h1>
+<p>5G Core:</p>
+<pre><code>~/ieee_ants2024_oai_tutorial/cn/conf/config.yaml</code></pre>
+<p>gNB:</p>
+<pre><code>~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.106prb.rfsim.conf</code></pre>
+<p>nrUE:</p>
+<pre><code>~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf</code></pre>
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/imsi.png" alt="drawing" width="800"/>
+</p>
+</div>
 <div class="slide section level1">
 
 <ul>
 <li>Run the gNB</li>
 </ul>
-<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb13-1" title="1"><span class="bu">cd</span> ~/openairinterface5g/cmake_targets/ran_build/build</a>
-<a class="sourceLine" id="cb13-2" title="2"><span class="fu">sudo</span> -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.106prb.rfsim.conf</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb16-1" title="1"><span class="bu">cd</span> ~/openairinterface5g/cmake_targets/ran_build/build</a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="fu">sudo</span> -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.106prb.rfsim.conf</a></code></pre></div>
+<ul>
+<li>Verify gNB connected to 5G Core:</li>
+</ul>
+<div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb17-1" title="1">[<span class="ex">NGAP</span>]   Send NGSetupRequest to AMF</a>
+<a class="sourceLine" id="cb17-2" title="2">[<span class="ex">NGAP</span>]   3584 -<span class="op">&gt;</span> 0000e000</a>
+<a class="sourceLine" id="cb17-3" title="3">[<span class="ex">NGAP</span>]   Received NGSetupResponse from AMF</a>
+<a class="sourceLine" id="cb17-4" title="4">[<span class="ex">GNB_APP</span>]   [gNB 0] Received NGAP_REGISTER_GNB_CNF: associated AMF 1</a></code></pre></div>
 <ul>
 <li>Run the UE from a second terminal:</li>
 </ul>
-<div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb14-1" title="1"><span class="bu">cd</span> ~/openairinterface5g/cmake_targets/ran_build/build</a>
-<a class="sourceLine" id="cb14-2" title="2"><span class="fu">sudo</span> -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><a class="sourceLine" id="cb18-1" title="1"><span class="bu">cd</span> ~/openairinterface5g/cmake_targets/ran_build/build</a>
+<a class="sourceLine" id="cb18-2" title="2"><span class="fu">sudo</span> -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim --ssb 516 -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf</a></code></pre></div>
 </div>
 <div class="slide section level1">
 
-<p>Verify that it is connected: you should see the following output at gNB:</p>
+<p>Verify end-to-end connectivity: you should see the following in the logs:</p>
+<p><strong>gNB:</strong></p>
+<p>Check for <code>RRC_CONNECTED</code> state:</p>
+<pre><code>[NR_MAC]    330. 0 UE b010: Received Ack of Msg4. CBRA procedure succeeded!
+[NR_RRC]   [UL] (cellID bc614e, UE ID 1 RNTI b010) Received RRCSetupComplete (RRC_CONNECTED reached)</code></pre>
+<p>Check for <code>Authentication</code>:</p>
+<pre><code>[NR_RRC]   UE 1 Logical Channel DL-DCCH, Generate SecurityModeCommand (bytes 3)
+[NR_RRC]   [UL] (cellID bc614e, UE ID 1 RNTI b010) Received Security Mode Complete</code></pre>
+<p>Check for <code>PDU sessions</code>:</p>
 <pre><code>[NR_RRC]   [DL] (cellID bc614e, UE ID 1 RNTI c40a) Generate RRCReconfiguration (bytes 307, xid 3)
 [RRC]   UE 1: PDU session ID 10 modified 1 bearers
 [NR_RRC]   [UL] (cellID bc614e, UE ID 1 RNTI c40a) Received RRCReconfigurationComplete
 [NR_RRC]   msg index 0, pdu_sessions index 0, status 2, xid 3): nb_of_pdusessions 1,  pdusession_id 10, teid: 2817854240 
 [NR_RRC]   NGAP_PDUSESSION_SETUP_RESP: sending the message</code></pre>
-<p>and nrUE:</p>
+</div>
+<div class="slide section level1">
+
+<p><strong>nrUE:</strong></p>
+<p>Check for <code>RRC_CONNECTED</code> state:</p>
+<pre><code>[NR_RRC]   State = NR_RRC_CONNECTED
+[NR_RRC]   [UE 0][RAPROC] Logical Channel UL-DCCH (SRB1), Generating RRCSetupComplete (bytes33)</code></pre>
+<p>Check for <code>Authentication</code>:</p>
+<pre><code>[NAS]   [UE] Received REGISTRATION ACCEPT message</code></pre>
+<p>Check for <code>oaitun_ue1</code> creation:</p>
 <pre><code>[NR_RRC]    Logical Channel UL-DCCH (SRB1), Generating RRCReconfigurationComplete (bytes 2)
 [OIP]   Interface oaitun_ue1 successfully configured, IPv4 10.0.0.7, IPv6 (null)</code></pre>
 <p>Correspondingly, an interface should have been brought up:</p>
@@ -194,12 +231,18 @@ sudo apt install -y docker docker-ce</code></pre>
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 5  bytes 240 (240.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0</code></pre>
-<p>Some other things to check: - You see the RA procedure of the UE in the gNB logs</p>
 </div>
 <div id="wireshark-traces" class="slide section level1">
 <h1>Wireshark traces</h1>
 <p>Log the traces using <code>tcpdump</code> as follows</p>
 <pre><code>sudo tcpdump -i oai-cn5g -w monolithic.pcap</code></pre>
+</div>
+<div id="g-standalone-call-flow" class="slide section level1">
+<h1>5G Standalone Call flow</h1>
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/callflow.png" alt="drawing" width="800"/>
+</p>
 </div>
 <div id="ping-test" class="slide section level1">
 <h1>Ping test</h1>
@@ -224,9 +267,6 @@ iperf3 -s</code></pre>
 <pre><code>iperf3 -B &lt;UE IP ADDRESS&gt; -c 192.168.70.135 -u -b 50M -R # DL
 iperf3 -B &lt;UE IP ADDRESS&gt; -c 192.168.70.135 -u -b 20M    # UL</code></pre>
 </div>
-<div id="explaing-the-configuration-files-5g-core-gnb-and-ue" class="slide section level1">
-<h1>Explaing the configuration files: 5G-CORE, gNB and UE</h1>
-</div>
 <div id="add-a-custom-ue" class="slide section level1">
 <h1>Add a custom UE</h1>
 <p>Create a UE config file <a href="./conf/ue2.conf">ue2.conf</a> with the following structure.</p>
@@ -238,10 +278,6 @@ iperf3 -B &lt;UE IP ADDRESS&gt; -c 192.168.70.135 -u -b 20M    # UL</code></pre>
   nssai_sst=1;
 }</code></pre>
 <p><strong>Add this UE infomation to the core database in</strong> <a href="./../cn/database/oai_db.sql">cn/database/oai_db.sql</a></p>
-</p>
-<p align="center">
-<img style="display: block; margin: auto;" src="./vmsetup/resources/imsi.png" alt="drawing" width="800"/>
-</p>
 </div>
 <div class="slide section level1">
 

@@ -109,6 +109,33 @@ cd cmake_targets/
 ./build_oai -w SIMU --gNB --nrUE --ninja
 ```
 
+
+---
+
+# Explain the configuration files: 
+
+
+5G Core:
+```
+~/ieee_ants2024_oai_tutorial/cn/conf/config.yaml
+```
+
+gNB:
+```
+~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.106prb.rfsim.conf
+```
+
+nrUE:
+```
+~/ieee_ants2024_oai_tutorial/ran/conf/ue.conf
+```
+
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/imsi.png" alt="drawing" width="800"/>
+</p>
+
+
 ---
 
 - Run the gNB
@@ -116,6 +143,14 @@ cd cmake_targets/
 ```bash
 cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.106prb.rfsim.conf
+```
+
+- Verify gNB connected to 5G Core:
+```bash
+[NGAP]   Send NGSetupRequest to AMF
+[NGAP]   3584 -> 0000e000
+[NGAP]   Received NGSetupResponse from AMF
+[GNB_APP]   [gNB 0] Received NGAP_REGISTER_GNB_CNF: associated AMF 1
 ```
 
 
@@ -128,7 +163,24 @@ sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim -
 
 ---
 
-Verify that it is connected: you should see the following output at gNB:
+Verify end-to-end connectivity: you should see the following in the logs:
+
+**gNB:** 
+
+Check for `RRC_CONNECTED` state:
+
+```
+[NR_MAC]    330. 0 UE b010: Received Ack of Msg4. CBRA procedure succeeded!
+[NR_RRC]   [UL] (cellID bc614e, UE ID 1 RNTI b010) Received RRCSetupComplete (RRC_CONNECTED reached)
+```
+
+Check for `Authentication`:
+```
+[NR_RRC]   UE 1 Logical Channel DL-DCCH, Generate SecurityModeCommand (bytes 3)
+[NR_RRC]   [UL] (cellID bc614e, UE ID 1 RNTI b010) Received Security Mode Complete
+```
+
+Check for `PDU sessions`:
 
 ```
 [NR_RRC]   [DL] (cellID bc614e, UE ID 1 RNTI c40a) Generate RRCReconfiguration (bytes 307, xid 3)
@@ -137,8 +189,24 @@ Verify that it is connected: you should see the following output at gNB:
 [NR_RRC]   msg index 0, pdu_sessions index 0, status 2, xid 3): nb_of_pdusessions 1,  pdusession_id 10, teid: 2817854240 
 [NR_RRC]   NGAP_PDUSESSION_SETUP_RESP: sending the message
 ```
-and nrUE:
 
+---
+
+**nrUE:**
+
+Check for `RRC_CONNECTED` state:
+```
+[NR_RRC]   State = NR_RRC_CONNECTED
+[NR_RRC]   [UE 0][RAPROC] Logical Channel UL-DCCH (SRB1), Generating RRCSetupComplete (bytes33)
+```
+
+
+Check for `Authentication`:
+```
+[NAS]   [UE] Received REGISTRATION ACCEPT message
+```
+
+Check for `oaitun_ue1` creation:
 ```
 [NR_RRC]    Logical Channel UL-DCCH (SRB1), Generating RRCReconfigurationComplete (bytes 2)
 [OIP]   Interface oaitun_ue1 successfully configured, IPv4 10.0.0.7, IPv6 (null)
@@ -156,15 +224,21 @@ oaitun_ue1: flags=209<UP,POINTOPOINT,RUNNING,NOARP>  mtu 1500
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 ```
 
-Some other things to check:
-- You see the RA procedure of the UE in the gNB logs
-
 # Wireshark traces
 
 Log the traces using `tcpdump` as follows
 ```
 sudo tcpdump -i oai-cn5g -w monolithic.pcap
 ```
+
+---
+
+# 5G Standalone Call flow
+
+</p>
+<p align="center">
+<img style="display: block; margin: auto;" src="./vmsetup/resources/callflow.png" alt="drawing" width="800"/>
+</p>
 
 ---
 
@@ -192,11 +266,6 @@ iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 50M -R # DL
 iperf3 -B <UE IP ADDRESS> -c 192.168.70.135 -u -b 20M    # UL
 ```
 
----
-
-# Explaing the configuration files: 5G-CORE, gNB and UE
-
----
 
 # Add a custom UE
 
@@ -211,11 +280,6 @@ uicc0 = {
 }
 ```
 **Add this UE infomation to the core database in** [cn/database/oai_db.sql](./../cn/database/oai_db.sql)
-
-</p>
-<p align="center">
-<img style="display: block; margin: auto;" src="./vmsetup/resources/imsi.png" alt="drawing" width="800"/>
-</p>
 
 ---
 
