@@ -161,8 +161,8 @@ sudo apt install -y docker docker-ce</code></pre>
 <a class="sourceLine" id="cb12-5" title="5"><span class="ex">./build_oai</span> -I  </a>
 <a class="sourceLine" id="cb12-6" title="6"><span class="ex">./build_oai</span> -w SIMU --gNB --nrUE --ninja</a></code></pre></div>
 </div>
-<div id="explain-the-configuration-files" class="slide section level1">
-<h1>Explain the configuration files:</h1>
+<div id="key-parameters-to-check-in-the-configuration-files-mcc-mnc-sst-sd" class="slide section level1">
+<h1>Key parameters to check in the configuration files: mcc, mnc, sst, sd</h1>
 <p>5G Core:</p>
 <pre><code>~/ieee_ants2024_oai_tutorial/cn/conf/config.yaml</code></pre>
 <p>gNB:</p>
@@ -288,6 +288,15 @@ iperf3 -B &lt;UE IP ADDRESS&gt; -c 192.168.70.135 -u -b 20M    # UL</code></pre>
 <pre><code>INSERT INTO `SessionManagementSubscriptionData` (`ueid`, `servingPlmnid`, `singleNssai`, `dnnConfigurations`) VALUES
 (&#39;001010000000002&#39;, &#39;00101&#39;, &#39;{\&quot;sst\&quot;: 1, \&quot;sd\&quot;: \&quot;FFFFFF\&quot;}&#39;,&#39;{\&quot;oai\&quot;:{\&quot;pduSessionTypes\&quot;:{ \&quot;defaultSessionType\&quot;: \&quot;IPV4\&quot;},\&quot;sscModes\&quot;: {\&quot;defaultSscMode\&quot;: \&quot;SSC_MODE_1\&quot;},\&quot;5gQosProfile\&quot;: {\&quot;5qi\&quot;: 6,\&quot;arp\&quot;:{\&quot;priorityLevel\&quot;: 15,\&quot;preemptCap\&quot;: \&quot;NOT_PREEMPT\&quot;,\&quot;preemptVuln\&quot;:\&quot;PREEMPTABLE\&quot;},\&quot;priorityLevel\&quot;:1},\&quot;sessionAmbr\&quot;:{\&quot;uplink\&quot;:\&quot;1000Mbps\&quot;, \&quot;downlink\&quot;:\&quot;1000Mbps\&quot;},\&quot;staticIpAddress\&quot;:[{\&quot;ipv4Addr\&quot;: \&quot;10.0.0.3\&quot;}]},\&quot;ims\&quot;:{\&quot;pduSessionTypes\&quot;:{ \&quot;defaultSessionType\&quot;: \&quot;IPV4V6\&quot;},\&quot;sscModes\&quot;: {\&quot;defaultSscMode\&quot;: \&quot;SSC_MODE_1\&quot;},\&quot;5gQosProfile\&quot;: {\&quot;5qi\&quot;: 2,\&quot;arp\&quot;:{\&quot;priorityLevel\&quot;: 15,\&quot;preemptCap\&quot;: \&quot;NOT_PREEMPT\&quot;,\&quot;preemptVuln\&quot;:\&quot;PREEMPTABLE\&quot;},\&quot;priorityLevel\&quot;:1},\&quot;sessionAmbr\&quot;:{\&quot;uplink\&quot;:\&quot;1000Mbps\&quot;, \&quot;downlink\&quot;:\&quot;1000Mbps\&quot;}}}&#39;);</code></pre>
 <p>Restart the <code>5G core</code> and use the config file <a href="./conf/ue2.conf">ue2.conf</a> while running OAI UE</p>
+</div>
+<div id="most-common-errors" class="slide section level1">
+<h1>Most common errors:</h1>
+<ol style="list-style-type: decimal">
+<li>NGAP setup failure</li>
+<li>Unidentified/Illegal UE</li>
+<li>PDU session reject</li>
+</ol>
+<p><strong>Debug:</strong> wireshak traces and the logs</p>
 </div>
 <div id="configuring-tdd-pattern" class="slide section level1">
 <h1>Configuring TDD Pattern</h1>

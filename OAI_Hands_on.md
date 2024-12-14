@@ -112,8 +112,7 @@ cd cmake_targets/
 
 ---
 
-# Explain the configuration files: 
-
+# Key parameters to check in the configuration files: mcc, mnc, sst, sd
 
 5G Core:
 ```
@@ -297,7 +296,15 @@ INSERT INTO `SessionManagementSubscriptionData` (`ueid`, `servingPlmnid`, `singl
 
 Restart the `5G core` and use the config file [ue2.conf](./conf/ue2.conf) while running OAI UE
 
+---
 
+# Most common errors:
+
+1. NGAP setup failure
+2. Unidentified/Illegal UE
+3. PDU session reject
+
+**Debug:** wireshak traces and the logs
 
 ---
 
