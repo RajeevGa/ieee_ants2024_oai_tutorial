@@ -226,18 +226,23 @@ cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo -E ./nr-softmodem --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/gnb.sa.band78.106prb.rfsim.conf
 ```
 
+Make sure the script file multi-ue.sh is executable, if not modify its permissions:
+```
+chmod +x ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh
+```
+
 To start UE1:
 ```
 cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh -c1 -e
-sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim -O /home/rakeshmundlamuri7/ieee_ants2024_oai_tutorial/ran/conf/ue1.conf --rfsimulator.serveraddr 10.201.1.100
+sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue1.conf --rfsimulator.serveraddr 10.201.1.100 # verify serveraddr
 ```
 
 To start UE2:
 ```
 cd ~/openairinterface5g/cmake_targets/ran_build/build
 sudo ~/ieee_ants2024_oai_tutorial/ran/multi-ue.sh -c2 -e
-sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim -O /home/rakeshmundlamuri7/ieee_ants2024_oai_tutorial/ran/conf/ue2.conf --rfsimulator.serveraddr 10.202.1.100
+sudo -E ./nr-uesoftmodem -r 106 --numerology 1 --band 78 -C 3619200000 --rfsim -O ~/ieee_ants2024_oai_tutorial/ran/conf/ue2.conf --rfsimulator.serveraddr 10.202.1.100 # verify serveraddr
 ```
 
 To login to ue1 namespace
@@ -257,13 +262,13 @@ You can now perform ping and iperf tests
 ping from UE1
 
 ```
-ping -I oaitun_ue1 192.168.70.135                 # from host, "UL", to oai-ext-dn
+ping -I oaitun_ue1 192.168.70.135                 # from host, "UL", to oai-ext-dn ## verify the host-name "oaitun_ue1" from ue1 bash with ifconfig
 ```
 
 ping from UE2
 
 ```
-ping -I oaitun_ue1 192.168.70.135                 # from host, "UL", to oai-ext-dn
+ping -I oaitun_ue1 192.168.70.135                 # from host, "UL", to oai-ext-dn ## verify the host-name "oaitun_ue2" from ue2 bash with ifconfig
 ```
 
 
